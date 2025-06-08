@@ -1,0 +1,21 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+#info {
+    margin-bottom: 10px;
+}
+
+#gameCanvas {
+    border: 1px solid #000;
+    cursor: crosshair;
+}
+
+.hidden {
+    display: none;
+}
+
+#gameOver {
+    margin-top: 20px;
+}
