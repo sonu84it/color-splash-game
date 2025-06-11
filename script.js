@@ -7,6 +7,7 @@ const finalScoreEl = document.getElementById('finalScore');
 const restartBtn = document.getElementById('restartBtn');
 
 let blobs = [];
+let splashes = [];
 let score = 0;
 let timeLeft = 60;
 let running = false;
@@ -20,6 +21,10 @@ function randomColor() {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+function rgba(color, alpha) {
+    return color.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+}
+
 function createBlob() {
     const radius = 20 + Math.random() * 20;
     const blob = {
@@ -31,6 +36,35 @@ function createBlob() {
         color: randomColor()
     };
     blobs.push(blob);
+}
+
+function createSplash(x, y, color) {
+    splashes.push({
+        x,
+        y,
+        radius: 0,
+        maxRadius: 40,
+        alpha: 1,
+        color
+    });
+}
+
+function updateSplashes() {
+    for (let i = splashes.length - 1; i >= 0; i--) {
+        const s = splashes[i];
+        s.radius += 3;
+        s.alpha -= 0.05;
+        if (s.radius > s.maxRadius || s.alpha <= 0) {
+            splashes.splice(i, 1);
+        }
+    }
+}
+
+function drawSplash(splash) {
+    ctx.beginPath();
+    ctx.arc(splash.x, splash.y, splash.radius, 0, Math.PI * 2);
+    ctx.fillStyle = rgba(splash.color, splash.alpha);
+    ctx.fill();
 }
 
 function drawBlob(blob) {
@@ -53,18 +87,18 @@ function updateBlobs() {
     }
 }
 
-function render() {
+function loop() {
+    if (!running) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    updateBlobs();
+    updateSplashes();
     for (const blob of blobs) {
         drawBlob(blob);
     }
-    if (running) {
-        requestAnimationFrame(render);
+    for (const splash of splashes) {
+        drawSplash(splash);
     }
-}
-
-function gameLoop() {
-    updateBlobs();
+    requestAnimationFrame(loop);
 }
 
 function playSound() {
@@ -91,6 +125,7 @@ function canvasClick(e) {
         const dy = y - blob.y;
         if (Math.sqrt(dx * dx + dy * dy) < blob.radius) {
             blobs.splice(i, 1);
+            createSplash(blob.x, blob.y, blob.color);
             score++;
             scoreEl.textContent = `Score: ${score}`;
             playSound();
@@ -101,6 +136,7 @@ function canvasClick(e) {
 
 function startGame() {
     blobs = [];
+    splashes = [];
     score = 0;
     timeLeft = 60;
     running = true;
@@ -119,7 +155,7 @@ function startGame() {
             endGame();
         }
     }, 1000);
-    requestAnimationFrame(render);
+    requestAnimationFrame(loop);
 }
 
 function endGame() {
@@ -133,5 +169,4 @@ function endGame() {
 restartBtn.addEventListener('click', startGame);
 canvas.addEventListener('click', canvasClick);
 
-setInterval(gameLoop, 16);
 startGame();
