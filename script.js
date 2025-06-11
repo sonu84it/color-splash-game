@@ -144,7 +144,7 @@ index 0000000000000000000000000000000000000000..a3cc35aae5843e7282333d5bc923d0fc
 +    splashes = [];
 +    score = 0;
 +    timeLeft = 60;
-+    running = true;
+window.addEventListener('DOMContentLoaded', startGame);
 +    scoreEl.textContent = `Score: ${score}`;
 +    timerEl.textContent = `Time: ${timeLeft}`;
 +    gameOverEl.classList.add('hidden');
