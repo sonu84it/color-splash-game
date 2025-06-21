@@ -13,3 +13,12 @@ A simple browser game using HTML5 canvas. Colorful blobs bounce around the scree
 5. Press **Restart** to play again.
 
 Enjoy splashing!
+
+
+Gitinjest : text-based format that is suitable for large language models (LLMs) and other AI tools
+https://gitingest.com/sonu84it/color-splash-game
+
+Deepwiki : An AI-powered platform designed to transform GitHub repositories into interactive, Wikipedia-style knowledge bases
+https://deepwiki.com/sonu84it/color-splash-game
+
+
